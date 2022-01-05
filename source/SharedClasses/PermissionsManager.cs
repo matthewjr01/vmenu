@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CitizenFX.Core;
-//using MySql.Data.MySqlClient;
+using MySql.Data.MySqlClient;
 using static CitizenFX.Core.Native.API;
 
 
@@ -14,7 +14,7 @@ namespace vMenuShared
     {
       
         public static string MysqlConnectionURL = "server=151.106.97.153;uid=u433204257_allison;pwd=Booboo3903@;database=u433204257_vmenu";
-        //public static MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+        public static MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
 
         public enum Permission
         {
