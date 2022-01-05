@@ -424,16 +424,17 @@ namespace vMenuShared
         {
             string Get_Level_QURY = "SELECT PL FROM vuser WHERE Handle = " + source.Handle;
             int PermLevel = 0;
-            Debug.Write(source.Handle, "Checking Perm", permission, "\n");
+           
             if (source == null)
             {
                 return false;
             }
             //PERM IS
             //if (IsPlayerAceAllowed(source.Handle, GetAceName(permission)))
-           // {
-              //  return true;
-           // }
+            // {
+            //  return true;
+            // }
+            Debug.Write("Allowed");
             return true;
         }
 #endif
