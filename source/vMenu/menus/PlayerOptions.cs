@@ -39,7 +39,7 @@ namespace vMenuClient
         {
             #region create menu and menu items
             // Create the menu.
-            menu = new Menu(Game.Player.Name, "Player Options");
+            menu = new Menu(Game.Player.Name, "BVRP Player Options");
 
             // Create all checkboxes.
             MenuCheckboxItem playerGodModeCheckbox = new MenuCheckboxItem("Godmode", "Makes you invincible.", PlayerGodMode);

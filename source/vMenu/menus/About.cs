@@ -21,14 +21,14 @@ namespace vMenuClient
         private void CreateMenu()
         {
             // Create the menu.
-            menu = new Menu("vMenu", "About vMenu");
+            menu = new Menu("BVRP Menu", "About BVRP VMENU");
 
             // Create menu items.
-            MenuItem version = new MenuItem("vMenu Version", $"This server is using vMenu ~b~~h~{MainMenu.Version}~h~~s~.")
+            MenuItem version = new MenuItem("Version", $"This server is using vMenu ~b~~h~{MainMenu.Version}~h~~s~.")
             {
                 Label = $"~h~{MainMenu.Version}~h~"
             };
-            MenuItem credits = new MenuItem("About vMenu / Credits", "vMenu is made by ~b~Vespura~s~. For more info, checkout ~b~www.vespura.com/vmenu~s~. Thank you to: Deltanic, Brigliar, IllusiveTea, Shayan Doust and zr0iq for your contributions.");
+            MenuItem credits = new MenuItem("About vMenu / Credits", "");
 
             string serverInfoMessage = vMenuShared.ConfigManager.GetSettingsString(vMenuShared.ConfigManager.Setting.vmenu_server_info_message);
             if (!string.IsNullOrEmpty(serverInfoMessage))
