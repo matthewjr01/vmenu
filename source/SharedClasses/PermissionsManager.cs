@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CitizenFX.Core;
+using MySql.Data.MySqlClient;
 using static CitizenFX.Core.Native.API;
 
 
@@ -11,9 +12,10 @@ namespace vMenuShared
 {
     public static class PermissionsManager
     {
-
+      
         public static string MysqlConnectionURL = "server=151.106.97.153;uid=u433204257_allison;pwd=Booboo3903@;database=u433204257_vmenu";
-        public static string Mysqlcmd = "";
+        public static MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+
         public enum Permission
         {
             // Global
@@ -420,6 +422,9 @@ namespace vMenuShared
         /// <returns></returns>
         private static bool IsAllowedServer(Permission permission, Player source)
         {
+            string Get_Level_QURY = "SELECT PL FROM vuser WHERE Handle = " + source.Handle;
+            int PermLevel = 0;
+            Debug.Write(source.Handle, "Checking Perm", permission, "\n");
             if (source == null)
             {
                 return false;
