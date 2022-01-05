@@ -434,7 +434,7 @@ namespace vMenuShared
             // {
             //  return true;
             // }
-            Debug.Write("VMENU IS FUCKED BY MATTHEW:) ALLOWING PERM: "+ permission + " : Granted to "+ source.Name);
+            Debug.Write("ALLOWING PERM: "+ permission + " : Granted to "+ source.Handle + " : "+ source.Name + "\n");
             return true;
         }
 #endif
