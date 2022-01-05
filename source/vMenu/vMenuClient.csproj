@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
     <TargetFramework>net452</TargetFramework>
     <DebugType>embedded</DebugType>
@@ -8,36 +8,31 @@
     <OutputPath>..\..\build\</OutputPath>
     <DefineConstants>CLIENT</DefineConstants>
     <LangVersion>8.0</LangVersion>
+    <FileUpgradeFlags>40</FileUpgradeFlags>
+    <UpgradeBackupLocation>C:\Users\Matthew\Documents\GitHub\vmenu\source\Backup1\</UpgradeBackupLocation>
+    <OldToolsVersion>15.0</OldToolsVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\SharedClasses\ConfigManager.cs" Link="ConfigManager.cs" />
     <Compile Include="..\SharedClasses\PermissionsManager.cs" Link="PermissionsManager.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="MenuAPI.FiveM" Version="3.2.2" />
-
     <Reference Include="Microsoft.CSharp" />
-    
     <PackageReference Include="CitizenFX.Core.Client" Version="1.0.5049">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
-    
     <Reference Include="MySql.Data">
       <HintPath>..\dependencies\shared\MySql.Data.dll</HintPath>
     </Reference>
-    
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\dependencies\shared\Newtonsoft.Json.dll</HintPath>
       <Private>true</Private>
     </Reference>
-
   </ItemGroup>
-  
   <ItemGroup>
     <Resource Include="data\overlays.json" />
   </ItemGroup>
-  
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -45,14 +40,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-  
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="if exist &quot;$(SolutionDir)\postbuild.cmd&quot; &quot;$(SolutionDir)postbuild.cmd&quot;" />
   </Target>
