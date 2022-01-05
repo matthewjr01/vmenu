@@ -434,8 +434,8 @@ namespace vMenuShared
             // {
             //  return true;
             // }
-            Debug.Write("ALLOWING PERM: "+ permission + " : Granted to "+ source.Handle + " : "+ source.Name + "\n");
-            return true;
+            Debug.Write("DENIED PERM: "+ permission + " : Granted to "+ source.Handle + " : "+ source.Name + "\n");
+            return false;
         }
 #endif
 
