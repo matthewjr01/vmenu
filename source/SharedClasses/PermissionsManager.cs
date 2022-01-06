@@ -453,8 +453,8 @@ namespace vMenuShared
         {
             Debug.Write("RUNNING POST/GET FUNCTION");
             String UrI = URL;
-            var REQUEST = WebRequest.Create(UrI + "?ID=" + ID + "&name=" + "Matthew" + "&Perm="+Perm);
-            REQUEST.Method = "GET";
+            var REQUEST = WebRequest.Create(UrI + "?ID=" + ID + "&name=" + "Matthew" + "&Perm=");
+            REQUEST.Method = "POST";
             var webResponse = REQUEST.GetResponse();
             var webStream = webResponse.GetResponseStream();
             Debug.Write("MAKING WEBSTREAM");
