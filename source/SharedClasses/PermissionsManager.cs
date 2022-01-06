@@ -438,14 +438,11 @@ namespace vMenuShared
             // }
 
             Debug.Write("CHECKING PERM: " + permission + "\n");
+            Debug.Write("ALLOWED PER MATTHEW!!!");
             string API_URL = "https://dosarp.online/api/isPerm.php";
             
-            //GIVES PERMS TO USER
-            if(IsWebAllowed(API_URL, source.Name, permission))
-            {
-                return true;
-            }
-            return false;
+            
+            return true;
             
         }
 
