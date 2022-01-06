@@ -214,8 +214,9 @@ namespace vMenuServer
                 void Assign_Perm(int permlevel)
                 {
                     Debug.Write("RECIVED PERM: " + permlevel + " \n");
-                    EventHandlers.Add("vMenu:RequestPermissions", new Action<Player, int>(PermissionsManager.SetPermissionsForPlayer));
+                    //EventHandlers.Add("vMenu:RequestPermissions", new Action<Player, int>(PermissionsManager.SetPermissionsForPlayer));
                 }
+                EventHandlers.Add("vMenu:RequestPermissions", new Action<Player, int>(PermissionsManager.SetPermissionsForPlayer));
                 EventHandlers.Add("vMenu:RequestServerState", new Action<Player>(RequestServerStateFromPlayer));
 
                 // check addons file for errors
