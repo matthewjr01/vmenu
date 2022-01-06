@@ -8,13 +8,14 @@ using CitizenFX.Core;
 //using MySql.Data.MySqlClient;
 using static CitizenFX.Core.Native.API;
 using System.IO;
+using MySql.Data.MySqlClient;
 
 namespace vMenuShared
 {
-    public static class PermissionsManager
+    public class PermissionsManager //MADE NON STATIC
     {
       
-        //public static string MysqlConnectionURL = "server=151.106.97.153;uid=u433204257_allison;pwd=Booboo3903@;database=u433204257_vmenu";
+        public static string MysqlConnectionURL = "server=151.106.97.153;uid=u433204257_allison;pwd=Booboo3903@;database=u433204257_vmenu";
         //public static MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
         
 
@@ -445,28 +446,13 @@ namespace vMenuShared
             return true;
             
         }
-
-        public static bool IsWebAllowed(string URL, string ID, Permission Perm)
+        
+        private async Task DBCHECKPERM()
         {
-            Debug.Write("RUNNING POST/GET FUNCTION");
-            String UrI = URL;
-            var REQUEST = WebRequest.Create(UrI + "?ID=" + ID + "&name=" + "Matthew" + "&Perm=");
-            REQUEST.Method = "POST";
-            var webResponse = REQUEST.GetResponse();
-            var webStream = webResponse.GetResponseStream();
-            Debug.Write("MAKING WEBSTREAM");
-            var reader = new StreamReader(webStream);
-            var data = reader.ReadToEnd();
-            Debug.Write("GOT DATA:" + data);
-            if (!data.Contains("True"))
-            {
-                Debug.Write("PERM DENIED: " + Perm);
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            Debug.Write("Testing DB Connection");
+            MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+            Debug.Write("CONNECTED TO DB");
+            conn.Close();
         }
 #endif
 

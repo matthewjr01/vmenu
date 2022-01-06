@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using static vMenuServer.DebugLog;
 using static vMenuShared.ConfigManager;
 using vMenuShared;
+using MySql.Data.MySqlClient;
 
 namespace vMenuServer
 {
@@ -55,6 +56,7 @@ namespace vMenuServer
 
     public class MainServer : BaseScript
     {
+        public static string MysqlConnectionURL = "server=151.106.97.153;uid=u433204257_allison;pwd=Booboo3903@;database=u433204257_vmenu";
         #region vars
         // Debug shows more information when doing certain things. Leave it off to improve performance!
         public static bool DebugMode = GetResourceMetadata(GetCurrentResourceName(), "server_debug_mode", 0) == "true";
@@ -181,6 +183,7 @@ namespace vMenuServer
         public MainServer()
         {
             // name check
+
             
             
             int AuthLevel = 0;
@@ -215,6 +218,15 @@ namespace vMenuServer
                 {
                     Debug.Write("RECIVED PERM: " + permlevel + " \n");
                     //EventHandlers.Add("vMenu:RequestPermissions", new Action<Player, int>(PermissionsManager.SetPermissionsForPlayer));
+                }
+                DBCHECKPERM();
+                async Task DBCHECKPERM()
+                {
+                    Debug.Write("Testing DB Connection");
+                    MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+                    Debug.Write("CONNECTED TO DB");
+                    conn.Close();
+                    return;
                 }
                 EventHandlers.Add("vMenu:RequestPermissions", new Action<Player, int>(PermissionsManager.SetPermissionsForPlayer));
                 EventHandlers.Add("vMenu:RequestServerState", new Action<Player>(RequestServerStateFromPlayer));

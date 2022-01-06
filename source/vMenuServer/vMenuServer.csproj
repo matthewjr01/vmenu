@@ -19,6 +19,9 @@
     <Compile Include="..\SharedClasses\PermissionsManager.cs" Link="PermissionsManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="8.0.21" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="CitizenFX.Core">
       <HintPath>..\dependencies\shared\CitizenFX.Core.dll</HintPath>
     </Reference>
