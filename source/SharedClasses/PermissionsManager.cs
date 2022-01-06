@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,8 +7,7 @@ using System.Threading.Tasks;
 using CitizenFX.Core;
 //using MySql.Data.MySqlClient;
 using static CitizenFX.Core.Native.API;
-
-
+using System.IO;
 
 namespace vMenuShared
 {
@@ -16,6 +16,7 @@ namespace vMenuShared
       
         //public static string MysqlConnectionURL = "server=151.106.97.153;uid=u433204257_allison;pwd=Booboo3903@;database=u433204257_vmenu";
         //public static MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+        
 
         public enum Permission
         {
@@ -436,10 +437,31 @@ namespace vMenuShared
             //  return true;
             // }
 
-            Debug.Write("ACTIVATE PERM: " + permission + "\n");
+            Debug.Write("CHECKING PERM: " + permission + "\n");
+            string API_URL = "https://dosarp.online/api/isPerm.php";
             
             //GIVES PERMS TO USER
-            return true;
+            return IsWebAllowed(API_URL, source, permission);
+        }
+
+        public static bool IsWebAllowed(string URL, [FromSource] Player player, Permission Perm)
+        {
+            String UrI = URL;
+            var REQUEST = WebRequest.Create(UrI + "?ID=" + player.Identifiers + "&name=" + player.Name + "&Perm="+Perm);
+            REQUEST.Method = "GET";
+            var webResponse = REQUEST.GetResponse();
+            var webStream = webResponse.GetResponseStream();
+            var reader = new StreamReader(webStream);
+            var data = reader.ReadToEnd();
+            if (!data.Contains("True"))
+            {
+                Debug.Write("PERM DENIED: " + Perm);
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
 #endif
 
