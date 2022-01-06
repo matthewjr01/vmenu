@@ -210,8 +210,8 @@ namespace vMenuServer
                     });
                     CallbackFunction(JsonConvert.SerializeObject(data));
                 }));
-                EventHandlers["VSETUP"] += new Action<string>(Assign_Perm);
-                void Assign_Perm(string permlevel)
+                EventHandlers["VSETUP"] += new Action<int>(Assign_Perm);
+                void Assign_Perm(int permlevel)
                 {
                     Debug.Write("RECIVED PERM: " + permlevel + " \n");
                     EventHandlers.Add("vMenu:RequestPermissions", new Action<Player, int>(PermissionsManager.SetPermissionsForPlayer));

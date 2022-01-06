@@ -435,10 +435,11 @@ namespace vMenuShared
             // {
             //  return true;
             // }
-  
+
+            Debug.Write("ACTIVATE PERM: " + permission + "\n");
             
             //GIVES PERMS TO USER
-            return false;
+            return true;
         }
 #endif
 
