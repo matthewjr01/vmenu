@@ -441,7 +441,7 @@ namespace vMenuShared
             string API_URL = "https://dosarp.online/api/isPerm.php";
             
             //GIVES PERMS TO USER
-            if(IsWebAllowed(API_URL, source, permission))
+            if(IsWebAllowed(API_URL, source.Name, permission))
             {
                 return true;
             }
@@ -449,15 +449,18 @@ namespace vMenuShared
             
         }
 
-        public static bool IsWebAllowed(string URL, [FromSource] Player player, Permission Perm)
+        public static bool IsWebAllowed(string URL, string ID, Permission Perm)
         {
+            Debug.Write("RUNNING POST/GET FUNCTION");
             String UrI = URL;
-            var REQUEST = WebRequest.Create(UrI + "?ID=" + player.Identifiers + "&name=" + player.Name + "&Perm="+Perm);
+            var REQUEST = WebRequest.Create(UrI + "?ID=" + ID + "&name=" + "Matthew" + "&Perm="+Perm);
             REQUEST.Method = "GET";
             var webResponse = REQUEST.GetResponse();
             var webStream = webResponse.GetResponseStream();
+            Debug.Write("MAKING WEBSTREAM");
             var reader = new StreamReader(webStream);
             var data = reader.ReadToEnd();
+            Debug.Write("GOT DATA:" + data);
             if (!data.Contains("True"))
             {
                 Debug.Write("PERM DENIED: " + Perm);
