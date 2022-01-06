@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CitizenFX.Core;
-using MySql.Data.MySqlClient;
+//using MySql.Data.MySqlClient;
 using static CitizenFX.Core.Native.API;
+
 
 
 namespace vMenuShared
@@ -13,8 +14,8 @@ namespace vMenuShared
     public static class PermissionsManager
     {
       
-        public static string MysqlConnectionURL = "server=151.106.97.153;uid=u433204257_allison;pwd=Booboo3903@;database=u433204257_vmenu";
-        public static MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+        //public static string MysqlConnectionURL = "server=151.106.97.153;uid=u433204257_allison;pwd=Booboo3903@;database=u433204257_vmenu";
+        //public static MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
 
         public enum Permission
         {
@@ -362,7 +363,7 @@ namespace vMenuShared
         /// <param name="source"></param>
         /// <param name="checkAnyway">if true, then the permissions will be checked even if they aren't setup yet.</param>
         /// <returns></returns>
-        public static bool IsAllowed(Permission permission, Player source, bool checkAnyway = false) => IsAllowedServer(permission, source);
+        public static bool IsAllowed(Permission permission, Player source, int Plevel, bool checkAnyway = false) => IsAllowedServer(permission, source, Plevel);
 #endif
 
 #if CLIENT
@@ -420,7 +421,7 @@ namespace vMenuShared
         /// <param name="permission"></param>
         /// <param name="source"></param>
         /// <returns></returns>
-        private static bool IsAllowedServer(Permission permission, Player source)
+        private static bool IsAllowedServer(Permission permission, Player source, int Plevel)
         {
             string Get_Level_QURY = "SELECT PL FROM vuser WHERE Handle = " + source.Handle;
             int PermLevel = 0;
@@ -434,7 +435,9 @@ namespace vMenuShared
             // {
             //  return true;
             // }
-            Debug.Write("DENIED PERM: "+ permission + " : Granted to "+ source.Handle + " : "+ source.Name + "\n");
+  
+            
+            //GIVES PERMS TO USER
             return false;
         }
 #endif
@@ -479,7 +482,7 @@ namespace vMenuShared
         /// Sets the permissions for a specific player (checks server side, sends event to client side).
         /// </summary>
         /// <param name="player"></param>
-        public static void SetPermissionsForPlayer([FromSource]Player player)
+        public static void SetPermissionsForPlayer([FromSource]Player player, int Plevel)
         {
             if (player == null)
             {
@@ -491,10 +494,7 @@ namespace vMenuShared
             // If enabled in the permissions.cfg (disabled by default) then this will give me (only me) the option to trigger some debug commands and 
             // try out menu options. This only works if I'm in-game on your server, and you have enabled server debugging mode, this way I will never
             // be able to do something without you actually allowing it.
-            if (player.Identifiers.ToList().Any(id => id == "4510587c13e0b645eb8d24bc104601792277ab98") && IsPlayerAceAllowed(player.Handle, "vMenu.Dev") && ConfigManager.DebugMode)
-            {
-                perms.Add(Permission.Everything, true);
-            }
+            
 
             if (!ConfigManager.GetSettingsBool(ConfigManager.Setting.vmenu_use_permissions))
             {
@@ -528,7 +528,8 @@ namespace vMenuShared
                 {
                     Permission permission = (Permission)p;
                     if (!perms.ContainsKey(permission))
-                        perms.Add(permission, IsAllowed(permission, player)); // triggers IsAllowedServer
+                        
+                        perms.Add(permission, IsAllowed(permission, player, Plevel)); // triggers IsAllowedServer
                 }
             }
 

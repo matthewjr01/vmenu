@@ -181,6 +181,9 @@ namespace vMenuServer
         public MainServer()
         {
             // name check
+            
+            
+            int AuthLevel = 0;
             if (GetCurrentResourceName() != "vMenu")
             {
                 Exception InvalidNameException = new Exception("\r\n\r\n^1[vMenu] INSTALLATION ERROR!\r\nThe name of the resource is not valid. " +
@@ -207,7 +210,12 @@ namespace vMenuServer
                     });
                     CallbackFunction(JsonConvert.SerializeObject(data));
                 }));
-                EventHandlers.Add("vMenu:RequestPermissions", new Action<Player>(PermissionsManager.SetPermissionsForPlayer));
+                EventHandlers["VSETUP"] += new Action<string>(Assign_Perm);
+                void Assign_Perm(string permlevel)
+                {
+                    Debug.Write("RECIVED PERM: " + permlevel + " \n");
+                    EventHandlers.Add("vMenu:RequestPermissions", new Action<Player, int>(PermissionsManager.SetPermissionsForPlayer));
+                }
                 EventHandlers.Add("vMenu:RequestServerState", new Action<Player>(RequestServerStateFromPlayer));
 
                 // check addons file for errors
@@ -499,7 +507,7 @@ namespace vMenuServer
         {
             if (source != null)
             {
-                if (vMenuShared.PermissionsManager.GetPermissionAndParentPermissions(vMenuShared.PermissionsManager.Permission.PVKickPassengers).Any(perm => vMenuShared.PermissionsManager.IsAllowed(perm, source)))
+                if (vMenuShared.PermissionsManager.GetPermissionAndParentPermissions(vMenuShared.PermissionsManager.Permission.PVKickPassengers).Any(perm => vMenuShared.PermissionsManager.IsAllowed(perm, source, 3)))
                 {
                     TriggerClientEvent("vMenu:GetOutOfCar", vehicleNetId, playerOwner);
                     source.TriggerEvent("vMenu:Notify", "All passengers will be kicked out as soon as the vehicle stops moving, or after 10 seconds if they refuse to stop the vehicle.");
@@ -830,7 +838,7 @@ namespace vMenuServer
                 {
                     if (p != source && p != targetPlayer)
                     {
-                        if (vMenuShared.PermissionsManager.IsAllowed(vMenuShared.PermissionsManager.Permission.OPSeePrivateMessages, p))
+                        if (vMenuShared.PermissionsManager.IsAllowed(vMenuShared.PermissionsManager.Permission.OPSeePrivateMessages, p, 1))
                         {
                             p.TriggerEvent("vMenu:Notify", $"[vMenu Staff Log] <C>{source.Name}</C>~s~ sent a PM to <C>{targetPlayer.Name}</C>~s~: {message}");
                         }

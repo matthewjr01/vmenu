@@ -19,7 +19,7 @@
   <ItemGroup>
     <PackageReference Include="MenuAPI.FiveM" Version="3.2.2" />
     <Reference Include="Microsoft.CSharp" />
-    <PackageReference Include="CitizenFX.Core.Client" Version="1.0.5049">
+    <PackageReference Include="CitizenFX.Core.Client" Version="1.0.5167">
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
     <Reference Include="MySql.Data">
