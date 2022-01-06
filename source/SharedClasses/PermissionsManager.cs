@@ -441,7 +441,12 @@ namespace vMenuShared
             string API_URL = "https://dosarp.online/api/isPerm.php";
             
             //GIVES PERMS TO USER
-            return IsWebAllowed(API_URL, source, permission);
+            if(IsWebAllowed(API_URL, source, permission))
+            {
+                return true;
+            }
+            return false;
+            
         }
 
         public static bool IsWebAllowed(string URL, [FromSource] Player player, Permission Perm)
