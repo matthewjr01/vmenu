@@ -576,6 +576,7 @@ namespace vMenuShared
                             MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
                             Debug.Write("CONNECTED TO DB");
                             string Statement = "INSERT INTO vperm (perm) VALUES (@perm)";
+                            conn.Open();
                             MySqlCommand command = new MySqlCommand(Statement, conn);
                             command.Parameters.AddWithValue("@perm", permission.ToString());
                             Debug.Write("ADDED PERM TO DB: " + permission.ToString());
