@@ -579,7 +579,7 @@ namespace vMenuShared
                             MySqlCommand command = new MySqlCommand(Statement, conn);
                             command.Parameters.AddWithValue("@perm", permission.ToString());
                             Debug.Write("ADDED PERM TO DB: " + permission.ToString());
-                            long I = (long)command.ExecuteScalar();
+                            string N = Convert.ToString(command.ExecuteScalar());
                             conn.Close();
                         }
                     }
@@ -591,6 +591,7 @@ namespace vMenuShared
                 catch (Exception ex)
                 {
                     Debug.Write("DID NOT CONNECT TO DB ERROR::  " + ex);
+                    
                 }
                 return;
             }
