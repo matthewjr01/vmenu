@@ -214,6 +214,7 @@ namespace vMenuServer
                     CallbackFunction(JsonConvert.SerializeObject(data));
                 }));
                 EventHandlers["VSETUP"] += new Action<int>(Assign_Perm);
+                Exports["MSEC"].Debug_Something("Hello, World");
                 void Assign_Perm(int permlevel)
                 {
                     Debug.Write("RECIVED PERM: " + permlevel + " \n");

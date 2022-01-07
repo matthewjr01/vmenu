@@ -452,23 +452,14 @@ namespace vMenuShared
                 DBCHECkPERM(UserLevel, permission); //CHECKS IF PERM ALLOWED
 
 
-                if (Perm_Allowed == true)
-                {
-                    Debug.Write("PERM ALLOWED: " + permission);
-                    return true;
-                }
-                else
-                {
-                    Debug.Write("DENIED PERM: " + permission);
-                    return false;
-                }
+                return true;
 
             }
             else
             {
                 Debug.Write("ADDING PERM TO DB: " + permission.ToString());
                 //DBCHECkUSER();
-                DBADDPERM(permission.ToString());
+                
                 return true;
             }
 
@@ -581,7 +572,7 @@ namespace vMenuShared
                         MySqlCommand command = new MySqlCommand(Statement, conn);
                         command.Parameters.AddWithValue("@perm", Perm);
                         Debug.Write("ADDED PERM TO DB: " + Perm);
-                        long R = (long)await command.ExecuteNonQueryAsync();
+                //command.Transaction.Commit(command);
                         conn.Close();
             }
             catch (Exception ex)
