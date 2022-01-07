@@ -219,15 +219,7 @@ namespace vMenuServer
                     Debug.Write("RECIVED PERM: " + permlevel + " \n");
                     //EventHandlers.Add("vMenu:RequestPermissions", new Action<Player, int>(PermissionsManager.SetPermissionsForPlayer));
                 }
-                DBCHECKPERM();
-                async Task DBCHECKPERM()
-                {
-                    Debug.Write("Testing DB Connection");
-                    MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
-                    Debug.Write("CONNECTED TO DB");
-                    conn.Close();
-                    return;
-                }
+                
                 EventHandlers.Add("vMenu:RequestPermissions", new Action<Player, int>(PermissionsManager.SetPermissionsForPlayer));
                 EventHandlers.Add("vMenu:RequestServerState", new Action<Player>(RequestServerStateFromPlayer));
 

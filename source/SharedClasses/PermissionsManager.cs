@@ -15,9 +15,6 @@ namespace vMenuShared
     public class PermissionsManager //MADE NON STATIC
     {
       
-        public static string MysqlConnectionURL = "server=151.106.97.153;uid=u433204257_allison;pwd=Booboo3903@;database=u433204257_vmenu";
-        //public static MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
-        
 
         public enum Permission
         {
@@ -425,6 +422,13 @@ namespace vMenuShared
         /// <returns></returns>
         private static bool IsAllowedServer(Permission permission, Player source, int Plevel)
         {
+            string MysqlConnectionURL = "server=151.106.97.153;uid=u433204257_allison;pwd=Booboo3903@;database=u433204257_vmenu";
+            //public static MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+            string VUSER_DB = "vuser";
+            string VPERM_DB = "vperm";
+            int UserLevel = 0;
+            bool Perm_Allowed = false;
+            int REBUILD_DB = 1;
             string Get_Level_QURY = "SELECT PL FROM vuser WHERE Handle = " + source.Handle;
             int PermLevel = 0;
            
@@ -437,23 +441,158 @@ namespace vMenuShared
             // {
             //  return true;
             // }
+            if (REBUILD_DB != 1)
+            {
 
-            Debug.Write("CHECKING PERM: " + permission + "\n");
-            Debug.Write("ALLOWED PER MATTHEW!!!");
-            string API_URL = "https://dosarp.online/api/isPerm.php";
-            
-            
-            return true;
-            
+                Perm_Allowed = false; //SETS DEFAULT PERM ALLOWED TO FALSE! --SHOULD BE SET TO FALSE!!!!! 
+
+                Debug.Write("CHECKING USER");
+                DBCHECkUSER(source);  //CHECKS AND MAKES USER IF NON EXISTS IN DB
+                DBCHECKUL(source, permission); //CHECKS USER PERM LEVEL SET IN DB
+                DBCHECkPERM(UserLevel, permission); //CHECKS IF PERM ALLOWED
+
+
+                if (Perm_Allowed == true)
+                {
+                    Debug.Write("PERM ALLOWED: " + permission);
+                    return true;
+                }
+                else
+                {
+                    Debug.Write("DENIED PERM: " + permission);
+                    return false;
+                }
+
+            }
+            else
+            {
+                Debug.Write("ADDING PERM TO DB: " + permission);
+                DBCHECkUSER(source);
+                DBADDPERM(permission);
+                return true;
+            }
+
+            async Task DBCHECkUSER(Player player)
+            {
+                Debug.Write("Getting DB CONNECTION");
+                try
+                {
+                    MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+                    Debug.Write("CONNECTED TO DB");
+                    string Statement = "SELECT COUNT(0) FROM vuser WHERE Identifier = " + player.Identifiers;
+                    MySqlCommand command = new MySqlCommand(Statement, conn);
+                    long count = (long)command.ExecuteScalar();
+                    if (count >= 1)
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        DBADDUSER(player);
+                        return;
+                    }
+                    conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    Debug.Write("DID NOT CONNECT TO DB ERROR::  " + ex);
+                }
+                return;
+            }
+
+            async Task DBADDUSER(Player Player)
+            {
+                Debug.Write("Getting DB CONNECTION");
+                try
+                {
+
+                    MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+                    Debug.Write("CONNECTED TO DB");
+                    string Statement = "INSERT INTO vuser (Identifier, PL) VALUES (@ID, '0')";
+                    MySqlCommand command = new MySqlCommand(Statement, conn);
+                    command.Parameters.AddWithValue("@ID", Player.Identifiers.ToString());
+                    Debug.Write("ADDED PLAYER TO DB: " + Player.Identifiers.ToString());
+                    command.ExecuteScalar();
+                    conn.Close();
+
+                }
+                catch (Exception ex)
+                {
+                    Debug.Write("DID NOT CONNECT TO DB ERROR::  " + ex);
+                }
+                return;
+            }
+            async Task DBCHECKUL(Player player, Permission perm)
+            {
+                Debug.Write("Getting DB CONNECTION");
+                try
+                {
+                    MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+                    Debug.Write("CONNECTED TO DB");
+                    string Statement = "SELECT PL FROM " + VUSER_DB + " WHERE Identifier = " + player.Identifiers;
+                    MySqlCommand command = new MySqlCommand(Statement, conn);
+                    int Level = (int)command.ExecuteScalar();
+                    UserLevel += Level;
+                    conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    Debug.Write("DID NOT CONNECT TO DB ERROR::  " + ex);
+                }
+                return;
+            }
+
+            async Task DBCHECkPERM(int LPermLevel, Permission perm)
+            {
+                Debug.Write("Getting DB CONNECTION");
+                try
+                {
+                    MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+                    Debug.Write("CONNECTED TO DB");
+                    string Statement = "SELECT COUNT(0) FROM " + VPERM_DB + " WHERE perm = " + perm.ToString() + " AND " + "PermLevel = " + LPermLevel;
+                    MySqlCommand command = new MySqlCommand(Statement, conn);
+                    long isPerm = (long)command.ExecuteScalar();
+                    if (isPerm >= 1)
+                    {
+                        Perm_Allowed = true;
+                    }
+                    conn.Close();
+                }
+                catch (Exception ex)
+                {
+                    Debug.Write("DID NOT CONNECT TO DB ERROR::  " + ex);
+                }
+                return;
+            }
+
+            async Task DBADDPERM(Permission perm)
+            {
+                Debug.Write("Getting DB CONNECTION");
+                try
+                {
+                    if (REBUILD_DB == 1)
+                    {
+                        MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+                        Debug.Write("CONNECTED TO DB");
+                        string Statement = "INSERT INTO vperm (id, perm, permLevel) VALUES (NULL, @perm, 0)";
+                        MySqlCommand command = new MySqlCommand(Statement, conn);
+                        command.Parameters.AddWithValue("@perm", perm.ToString());
+                        Debug.Write("ADDED PERM TO DB: " + perm);
+                        command.ExecuteScalar();
+                        conn.Close();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.Write("DID NOT CONNECT TO DB ERROR::  " + ex);
+                }
+                return;
+            }
         }
+
         
-        private async Task DBCHECKPERM()
-        {
-            Debug.Write("Testing DB Connection");
-            MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
-            Debug.Write("CONNECTED TO DB");
-            conn.Close();
-        }
+
+        
 #endif
 
         private static Dictionary<Permission, List<Permission>> parentPermissions = new Dictionary<Permission, List<Permission>>();
