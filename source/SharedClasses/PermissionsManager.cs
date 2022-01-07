@@ -468,7 +468,7 @@ namespace vMenuShared
             {
                 Debug.Write("ADDING PERM TO DB: " + permission.ToString());
                 //DBCHECkUSER();
-                DBADDPERM();
+                DBADDPERM(permission.ToString());
                 return true;
             }
 
@@ -565,42 +565,36 @@ namespace vMenuShared
                 return;
             }
 
-            async Task DBADDPERM()
-            {
-                Debug.Write("Getting DB CONNECTION");
-                try
-                {
-                    if (permission.ToString() != null){
-                        if (REBUILD_DB == 1)
-                        {
-                            MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
-                            await conn.OpenAsync();
-                            Debug.Write("CONNECTED TO DB");
-                            string Statement = "INSERT INTO vperm (perm) VALUES (@perm)";
-                            MySqlCommand command = new MySqlCommand(Statement, conn);
-                            command.Parameters.AddWithValue("@perm", permission.ToString());
-                            Debug.Write("ADDED PERM TO DB: " + permission.ToString());
-                            long R = (long)await command.ExecuteNonQueryAsync();
-                            conn.Close();
-                        }
-                    }
-                    else
-                    {
-                        Debug.Write("PERM IS NULL!!");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Debug.Write("DID NOT CONNECT TO DB ERROR::  " + ex);
-                    
-                }
-                return;
-            }
+            
         }
 
-        
+        private static async Task DBADDPERM(string Perm)
+        {
+            string MysqlConnectionURL = "server=151.106.97.153;uid=u433204257_allison;pwd=Booboo3903@;database=u433204257_vmenu";
+            Debug.Write("Getting DB CONNECTION");
+            MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+            try
+            {
+                        await conn.OpenAsync();
+                        Debug.Write("CONNECTED TO DB");
+                        string Statement = "INSERT INTO vperm (perm) VALUES (@perm)";
+                        MySqlCommand command = new MySqlCommand(Statement, conn);
+                        command.Parameters.AddWithValue("@perm", Perm);
+                        Debug.Write("ADDED PERM TO DB: " + Perm);
+                        long R = (long)await command.ExecuteNonQueryAsync();
+                        conn.Close();
+            }
+            catch (Exception ex)
+            {
+                Debug.Write("DID NOT CONNECT TO DB ERROR::  " + ex);
 
-        
+            }
+            return;
+        }
+
+
+
+
 #endif
 
         private static Dictionary<Permission, List<Permission>> parentPermissions = new Dictionary<Permission, List<Permission>>();
