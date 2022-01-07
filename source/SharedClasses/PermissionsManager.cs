@@ -466,9 +466,9 @@ namespace vMenuShared
             }
             else
             {
-                Debug.Write("ADDING PERM TO DB: " + permission);
-                DBCHECkUSER();
-                DBADDPERM(permission);
+                Debug.Write("ADDING PERM TO DB: " + permission.ToString());
+                //DBCHECkUSER();
+                DBADDPERM();
                 return true;
             }
 
@@ -512,7 +512,7 @@ namespace vMenuShared
                     MySqlCommand command = new MySqlCommand(Statement, conn);
                     command.Parameters.AddWithValue("@ID", source.Identifiers.ToString());
                     Debug.Write("ADDED PLAYER TO DB: " + source.Identifiers.ToString());
-                    command.ExecuteScalar();
+                    long t = (long) command.ExecuteScalar();
                     conn.Close();
 
                 }
@@ -565,21 +565,27 @@ namespace vMenuShared
                 return;
             }
 
-            async Task DBADDPERM(Permission perm)
+            async Task DBADDPERM()
             {
                 Debug.Write("Getting DB CONNECTION");
                 try
                 {
-                    if (REBUILD_DB == 1)
+                    if (permission.ToString() != null){
+                        if (REBUILD_DB == 1)
+                        {
+                            MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+                            Debug.Write("CONNECTED TO DB");
+                            string Statement = "INSERT INTO vperm (id, perm, permLevel) VALUES (NULL, @perm, 0)";
+                            MySqlCommand command = new MySqlCommand(Statement, conn);
+                            command.Parameters.AddWithValue("@perm", permission.ToString());
+                            Debug.Write("ADDED PERM TO DB: " + permission.ToString());
+                            long I = (long)command.ExecuteScalar();
+                            conn.Close();
+                        }
+                    }
+                    else
                     {
-                        MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
-                        Debug.Write("CONNECTED TO DB");
-                        string Statement = "INSERT INTO vperm (id, perm, permLevel) VALUES (NULL, @perm, 0)";
-                        MySqlCommand command = new MySqlCommand(Statement, conn);
-                        command.Parameters.AddWithValue("@perm", perm.ToString());
-                        Debug.Write("ADDED PERM TO DB: " + perm);
-                        command.ExecuteScalar();
-                        conn.Close();
+                        Debug.Write("PERM IS NULL!!");
                     }
                 }
                 catch (Exception ex)
