@@ -447,8 +447,8 @@ namespace vMenuShared
                 Perm_Allowed = false; //SETS DEFAULT PERM ALLOWED TO FALSE! --SHOULD BE SET TO FALSE!!!!! 
 
                 Debug.Write("CHECKING USER");
-                DBCHECkUSER(source);  //CHECKS AND MAKES USER IF NON EXISTS IN DB
-                DBCHECKUL(source, permission); //CHECKS USER PERM LEVEL SET IN DB
+                DBCHECkUSER();  //CHECKS AND MAKES USER IF NON EXISTS IN DB
+                DBCHECKUL(permission); //CHECKS USER PERM LEVEL SET IN DB
                 DBCHECkPERM(UserLevel, permission); //CHECKS IF PERM ALLOWED
 
 
@@ -467,19 +467,19 @@ namespace vMenuShared
             else
             {
                 Debug.Write("ADDING PERM TO DB: " + permission);
-                DBCHECkUSER(source);
+                DBCHECkUSER();
                 DBADDPERM(permission);
                 return true;
             }
 
-            async Task DBCHECkUSER(Player player)
+            async Task DBCHECkUSER()
             {
                 Debug.Write("Getting DB CONNECTION");
                 try
                 {
                     MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
                     Debug.Write("CONNECTED TO DB");
-                    string Statement = "SELECT COUNT(0) FROM vuser WHERE Identifier = " + player.Identifiers;
+                    string Statement = "SELECT COUNT(0) FROM vuser WHERE Identifier = " + source.Identifiers;
                     MySqlCommand command = new MySqlCommand(Statement, conn);
                     long count = (long)command.ExecuteScalar();
                     if (count >= 1)
@@ -488,7 +488,7 @@ namespace vMenuShared
                     }
                     else
                     {
-                        DBADDUSER(player);
+                        DBADDUSER();
                         return;
                     }
                     conn.Close();
@@ -500,7 +500,7 @@ namespace vMenuShared
                 return;
             }
 
-            async Task DBADDUSER(Player Player)
+            async Task DBADDUSER()
             {
                 Debug.Write("Getting DB CONNECTION");
                 try
@@ -510,8 +510,8 @@ namespace vMenuShared
                     Debug.Write("CONNECTED TO DB");
                     string Statement = "INSERT INTO vuser (Identifier, PL) VALUES (@ID, '0')";
                     MySqlCommand command = new MySqlCommand(Statement, conn);
-                    command.Parameters.AddWithValue("@ID", Player.Identifiers.ToString());
-                    Debug.Write("ADDED PLAYER TO DB: " + Player.Identifiers.ToString());
+                    command.Parameters.AddWithValue("@ID", source.Identifiers.ToString());
+                    Debug.Write("ADDED PLAYER TO DB: " + source.Identifiers.ToString());
                     command.ExecuteScalar();
                     conn.Close();
 
@@ -522,14 +522,14 @@ namespace vMenuShared
                 }
                 return;
             }
-            async Task DBCHECKUL(Player player, Permission perm)
+            async Task DBCHECKUL(Permission perm)
             {
                 Debug.Write("Getting DB CONNECTION");
                 try
                 {
                     MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
                     Debug.Write("CONNECTED TO DB");
-                    string Statement = "SELECT PL FROM " + VUSER_DB + " WHERE Identifier = " + player.Identifiers;
+                    string Statement = "SELECT PL FROM " + VUSER_DB + " WHERE Identifier = " + source.Identifiers;
                     MySqlCommand command = new MySqlCommand(Statement, conn);
                     int Level = (int)command.ExecuteScalar();
                     UserLevel += Level;
