@@ -574,13 +574,13 @@ namespace vMenuShared
                         if (REBUILD_DB == 1)
                         {
                             MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+                            await conn.OpenAsync();
                             Debug.Write("CONNECTED TO DB");
                             string Statement = "INSERT INTO vperm (perm) VALUES (@perm)";
-                            conn.Open();
                             MySqlCommand command = new MySqlCommand(Statement, conn);
                             command.Parameters.AddWithValue("@perm", permission.ToString());
                             Debug.Write("ADDED PERM TO DB: " + permission.ToString());
-                            string N = Convert.ToString(command.ExecuteScalar());
+                            long R = (long)await command.ExecuteNonQueryAsync();
                             conn.Close();
                         }
                     }
