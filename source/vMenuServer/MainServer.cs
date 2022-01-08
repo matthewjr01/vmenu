@@ -56,7 +56,7 @@ namespace vMenuServer
 
     public class MainServer : BaseScript
     {
-        public static string MysqlConnectionURL = "server=151.106.97.153;uid=u433204257_allison;pwd=Booboo3903@;database=u433204257_vmenu";
+        public static string MysqlConnectionURL = "server=127.0.0.1;uid=root;pwd=Cookies124!;database=fivem";
         #region vars
         // Debug shows more information when doing certain things. Leave it off to improve performance!
         public static bool DebugMode = GetResourceMetadata(GetCurrentResourceName(), "server_debug_mode", 0) == "true";
