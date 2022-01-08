@@ -441,27 +441,8 @@ namespace vMenuShared
             // {
             //  return true;
             // }
-            if (REBUILD_DB != 1)
-            {
-
-                Perm_Allowed = false; //SETS DEFAULT PERM ALLOWED TO FALSE! --SHOULD BE SET TO FALSE!!!!! 
-
-                Debug.Write("CHECKING USER");
-                DBCHECkUSER();  //CHECKS AND MAKES USER IF NON EXISTS IN DB
-                DBCHECKUL(permission); //CHECKS USER PERM LEVEL SET IN DB
-                DBCHECkPERM(UserLevel, permission); //CHECKS IF PERM ALLOWED
-
-
-                return true;
-
-            }
-            else
-            {
-                Debug.Write("ADDING PERM TO DB: " + permission.ToString());
-                //DBCHECkUSER();
-                
-                return true;
-            }
+            DBCHECKUL(permission);
+            return true;
 
             async Task DBCHECkUSER()
             {
@@ -520,6 +501,7 @@ namespace vMenuShared
                 {
                     MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
                     Debug.Write("CONNECTED TO DB");
+                    conn.Open();
                     string Statement = "SELECT PL FROM " + VUSER_DB + " WHERE Identifier = " + source.Identifiers;
                     MySqlCommand command = new MySqlCommand(Statement, conn);
                     int Level = (int)command.ExecuteScalar();
