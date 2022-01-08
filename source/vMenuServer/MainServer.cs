@@ -56,7 +56,7 @@ namespace vMenuServer
 
     public class MainServer : BaseScript
     {
-        public static string MysqlConnectionURL = "server=127.0.0.1;uid=root;pwd=Cookies124!;database=fivem";
+        public static string MysqlConnectionURL = "server=127.0.0.1;uid=allison;pwd=Cookies124!;database=fivem";
         #region vars
         // Debug shows more information when doing certain things. Leave it off to improve performance!
         public static bool DebugMode = GetResourceMetadata(GetCurrentResourceName(), "server_debug_mode", 0) == "true";
@@ -220,23 +220,14 @@ namespace vMenuServer
                     Debug.Write("RECIVED PERM: " + permlevel + " \n");
                     //EventHandlers.Add("vMenu:RequestPermissions", new Action<Player, int>(PermissionsManager.SetPermissionsForPlayer));
                 }
-                async Task DBCHECKUL()
+                void DBCHECKUL()
                 {
-                    Debug.Write("Getting DB CONNECTION");
                     MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
-                    try
-                    {
-                        Debug.Write("CONNECTED TO DB");
-                        await conn.OpenAsync();
-                        string Statement = "SELECT PL FROM vuser WHERE Identifier = 1";
-                        Debug.Write("CONNECTED TO DB");
-                        Debug.Write("GOT DATA!!!");
-                        conn.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.Write("DID NOT CONNECT TO DB ERROR::  " + ex);
-                    }
+                    Debug.Write("CONNECTED TO DB");
+                    conn.Open();
+                    Debug.Write("CONNECTED TO DB");
+                    Debug.Write("GOT DATA!!!");
+                    conn.Close();
                     return;
                 }
 
