@@ -229,8 +229,7 @@ namespace vMenuServer
                         Debug.Write("CONNECTED TO DB");
                         await conn.OpenAsync();
                         string Statement = "SELECT PL FROM vuser WHERE Identifier = 1";
-                        MySqlCommand command = new MySqlCommand(Statement, conn);
-                        Object Level = (object)command.ExecuteScalarAsync();
+                        Debug.Write("CONNECTED TO DB");
                         Debug.Write("GOT DATA!!!");
                         conn.Close();
                     }
