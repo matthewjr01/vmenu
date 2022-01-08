@@ -220,7 +220,28 @@ namespace vMenuServer
                     Debug.Write("RECIVED PERM: " + permlevel + " \n");
                     //EventHandlers.Add("vMenu:RequestPermissions", new Action<Player, int>(PermissionsManager.SetPermissionsForPlayer));
                 }
-                
+                async Task DBCHECKUL()
+                {
+                    Debug.Write("Getting DB CONNECTION");
+                    MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
+                    try
+                    {
+                        Debug.Write("CONNECTED TO DB");
+                        await conn.OpenAsync();
+                        string Statement = "SELECT PL FROM vuser WHERE Identifier = 1";
+                        MySqlCommand command = new MySqlCommand(Statement, conn);
+                        Object Level = (object)command.ExecuteScalarAsync();
+                        Debug.Write("GOT DATA!!!");
+                        conn.Close();
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Write("DID NOT CONNECT TO DB ERROR::  " + ex);
+                    }
+                    return;
+                }
+
+                DBCHECKUL();
                 EventHandlers.Add("vMenu:RequestPermissions", new Action<Player, int>(PermissionsManager.SetPermissionsForPlayer));
                 EventHandlers.Add("vMenu:RequestServerState", new Action<Player>(RequestServerStateFromPlayer));
 
