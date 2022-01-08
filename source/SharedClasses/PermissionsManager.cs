@@ -497,15 +497,15 @@ namespace vMenuShared
             async Task DBCHECKUL(Permission perm)
             {
                 Debug.Write("Getting DB CONNECTION");
+                MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
                 try
                 {
-                    MySqlConnection conn = new MySqlConnection(MysqlConnectionURL);
                     Debug.Write("CONNECTED TO DB");
-                    conn.Open();
+                    await conn.OpenAsync();
                     string Statement = "SELECT PL FROM " + VUSER_DB + " WHERE Identifier = " + source.Identifiers;
                     MySqlCommand command = new MySqlCommand(Statement, conn);
-                    int Level = (int)command.ExecuteScalar();
-                    UserLevel += Level;
+                    Object Level = (object) command.ExecuteScalarAsync();
+                    Debug.Write("GOT DATA!!!");
                     conn.Close();
                 }
                 catch (Exception ex)
